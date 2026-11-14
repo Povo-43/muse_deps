@@ -9,3 +9,5 @@ set(DEP_CMAKE_ARGS
 )
 
 set(DEP_LICENSE_FILES NOTICE)
+
+set(DEP_PATCHES patch/0001-android-no-platform-log-header.patch)

@@ -1,0 +1,13 @@
+--- a/libSBRdec/src/lpp_tran.cpp	2023-12-21 11:06:47.000000000 +0000
++++ b/libSBRdec/src/lpp_tran.cpp	2026-11-14 23:13:14.419730489 +0000
+@@ -118,10 +118,6 @@
+   \sa lppTransposer(), main_audio.cpp, sbr_scale.h, \ref documentationOverview
+ */
+ 
+-#ifdef __ANDROID__
+-#include "log/log.h"
+-#endif
+-
+ #include "lpp_tran.h"
+ 
+ #include "sbr_ram.h"
