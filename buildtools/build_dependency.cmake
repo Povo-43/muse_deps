@@ -169,6 +169,21 @@ function(_bd_cmake_build srcdir)
         list(APPEND _configure_args
             -DCMAKE_TOOLCHAIN_FILE=${_emscripten_toolchain}
             -DBUILD_SHARED_LIBS=OFF)
+    elseif(BD_OS STREQUAL "android")
+        # Cross-compile with the Android NDK toolchain. Passing only the bare
+        # compiler would produce host architecture objects (the NDK clang
+        # driver needs the target, which the toolchain file provides).
+        set(_bd_android_ndk "${CMAKE_ANDROID_NDK}")
+        if("${_bd_android_ndk}" STREQUAL "" AND DEFINED ENV{ANDROID_NDK_ROOT})
+            set(_bd_android_ndk "$ENV{ANDROID_NDK_ROOT}")
+        endif()
+        if("${_bd_android_ndk}" STREQUAL "")
+            message(FATAL_ERROR "[deps] android: NDK path not found (CMAKE_ANDROID_NDK/ANDROID_NDK_ROOT)")
+        endif()
+        list(APPEND _configure_args
+            -DCMAKE_TOOLCHAIN_FILE=${_bd_android_ndk}/build/cmake/android.toolchain.cmake
+            -DANDROID_ABI=${CMAKE_ANDROID_ARCH_ABI}
+            -DANDROID_PLATFORM=android-${CMAKE_SYSTEM_VERSION})
     else()
         if(CMAKE_C_COMPILER)
             list(APPEND _configure_args -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER})
@@ -182,6 +197,11 @@ function(_bd_cmake_build srcdir)
     set(_initial_cache "")
     if(BD_DEPENDS_PREFIXES)
         string(APPEND _initial_cache "set(CMAKE_PREFIX_PATH \"${BD_DEPENDS_PREFIXES}\" CACHE STRING \"\" FORCE)\n")
+        # The Android toolchain restricts searches to the find root paths,
+        # so the dependency prefixes must be find roots too
+        if(BD_OS STREQUAL "android")
+            string(APPEND _initial_cache "set(CMAKE_FIND_ROOT_PATH \"${BD_DEPENDS_PREFIXES}\" CACHE STRING \"\" FORCE)\n")
+        endif()
     endif()
 
     # The Emscripten toolchain searches only inside the find root paths (CMAKE_FIND_ROOT_PATH_MODE_* ONLY),
