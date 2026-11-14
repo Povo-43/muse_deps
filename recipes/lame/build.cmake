@@ -17,7 +17,7 @@ file(WRITE "${SRC}/config.h"
 
 # Shared on unix
 # Static on windows, TODO: investigate if shared is needed
-if(BD_OS STREQUAL "windows")
+if(BD_OS STREQUAL "windows" OR BD_OS STREQUAL "android")
     set(_libtype STATIC)
 else()
     set(_libtype SHARED)

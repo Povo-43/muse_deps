@@ -179,6 +179,14 @@ function(require_dep name)
         endif()
     endif()
 
+    # Android packages only extract native libraries named "*.so", versioned
+    # sonames (e.g. libsndfile.so.1) would not be installed, so all deps are
+    # linked statically. There are no android prebuilts, they are built from
+    # source recipes.
+    if (LIB_OS STREQUAL "android" AND NOT mode STREQUAL "system")
+        set(DEP_STATIC ON)
+    endif()
+
     # An environment override can change the mode
     if(NOT DEP_STATIC OR LIB_OS STREQUAL "wasm")
         _extdeps_override("${name}" "${mode}" _override)

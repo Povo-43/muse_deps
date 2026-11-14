@@ -144,6 +144,14 @@ endfunction()
 function(_bd_cmake_build srcdir)
     string(REPLACE "@RECIPE_DIR@" "${BD_RECIPE_DIR}" _dep_cmake_args "${DEP_CMAKE_ARGS}")
 
+    # When a static build is requested, some recipes have no DEP_STATIC
+    # handling of their own: force it here (idempotent, later args win).
+    if(DEP_STATIC)
+        list(APPEND _dep_cmake_args
+            -DBUILD_SHARED_LIBS=OFF
+            -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
+    endif()
+
     set(_bd_generator "${CMAKE_GENERATOR}")
     if(NOT _bd_generator)
         set(_bd_generator Ninja)

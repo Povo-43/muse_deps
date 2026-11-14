@@ -1,4 +1,4 @@
-if(BD_OS STREQUAL "windows")
+if(BD_OS STREQUAL "windows" OR BD_OS STREQUAL "android")
     set(LIBTYPE STATIC)
 else()
     set(LIBTYPE SHARED)
