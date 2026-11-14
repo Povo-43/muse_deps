@@ -1,5 +1,5 @@
---- a/libSBRdec/src/lpp_tran.cpp	2023-12-21 11:06:47.000000000 +0000
-+++ b/libSBRdec/src/lpp_tran.cpp	2026-11-14 23:13:14.419730489 +0000
+--- a/libSBRdec/src/lpp_tran.cpp
++++ b/libSBRdec/src/lpp_tran.cpp	2026-11-14 23:18:32.332925302 +0000
 @@ -118,10 +118,6 @@
    \sa lppTransposer(), main_audio.cpp, sbr_scale.h, \ref documentationOverview
  */
@@ -11,3 +11,29 @@
  #include "lpp_tran.h"
  
  #include "sbr_ram.h"
+@@ -334,12 +330,6 @@
+       }
+     }
+   }
+-#ifdef __ANDROID__
+-  else {
+-    // Safetynet logging
+-    android_errorWriteLog(0x534e4554, "112160868");
+-  }
+-#endif
+ 
+   /* init bwIndex for each patch */
+   FDKmemclear(bwIndex, sizeof(bwIndex));
+@@ -930,12 +920,6 @@
+       FDKmemclear(&qmfBufferImag[i][targetStopBand], memSize);
+     }
+   }
+-#ifdef __ANDROID__
+-  else {
+-    // Safetynet logging
+-    android_errorWriteLog(0x534e4554, "112160868");
+-  }
+-#endif
+ 
+   /*
+   Calc common low band scale factor
